@@ -109,6 +109,7 @@ func main() {
 		))
 	}
 
+	http.Handle("/assets/", http.FileServer(http.Dir("./")))
 	http.HandleFunc("/run", routeRun)
 	http.HandleFunc("/", routeIndex)
 

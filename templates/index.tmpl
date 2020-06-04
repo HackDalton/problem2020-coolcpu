@@ -1,11 +1,23 @@
 {{template "header" .}}
-<h3>It's cool</h3>
 
-<form action="/run" method="POST">
-	<label>
-		Write code:
-		<textarea name="code"></textarea>
-	</label>
-	<input type="submit" value="Run" />
-</form>
+<section class="jumbotron text-center">
+	<div class="container">
+		<h1>The DynamicSystems&trade; CoolCPU is the future of computing.</h1>
+		<p class="lead">Advanced features like "addition" and "number comparisons" make anything else seem...<em>un</em>cool.</p>
+		<img src="assets/cool.png" />
+	</div>
+</section>
+
+<div class="container">
+	<h3>Try it now</h3>
+	<form action="/run" method="POST">
+		<div class="form-group">
+			<label for="code">Write your code here:</label>
+			<textarea name="code" class="form-control"></textarea>
+		</div>
+
+		<button type="submit" class="btn btn-primary">Run</button>
+	</form>
+</div>
+
 {{template "footer" .}}
