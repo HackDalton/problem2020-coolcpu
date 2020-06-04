@@ -1,0 +1,11 @@
+{{template "header" .}}
+<h3>It's cool</h3>
+
+<form action="/run" method="POST">
+	<label>
+		Write code:
+		<textarea name="code"></textarea>
+	</label>
+	<input type="submit" value="Run" />
+</form>
+{{template "footer" .}}

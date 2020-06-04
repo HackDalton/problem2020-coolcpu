@@ -1,0 +1,8 @@
+{{template "header" .}}
+
+<h3>Error - {{ .Err.Error }}</h3>
+
+<h4>CPU state</h4>
+<p>PC: {{ .CPU.PC }}</p>
+
+{{template "footer" .}}
