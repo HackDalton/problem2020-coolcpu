@@ -26,6 +26,9 @@
 	<div class="container">
 		<h3>Description</h3>
 		<p>
+			The CoolCPU is a brand new CPU architecture, inspired by processors like the Zilog Z80 and the MOS Technology 6502.
+		</p>
+		<p>
 			The CoolCPU can access up to 256 bytes of external memory.
 			The first 128 bytes (<code>0x00</code> to <code>0x7F</code>) are <em>read-only memory</em>, or ROM, and it's what you set in the "Try it now" box above.
 			Then, the memory from <code>0x80</code> to <code>0xF0</code> is <em>random-access memory</em>, or RAM.
@@ -59,9 +62,9 @@
 		<table class="isa">
 			<thead>
 				<tr>
-					<th>Name</th>
-					<th>Hexadecimal</th>
-					<th>Description</th>
+					<th class="isaHeaderName">Name</th>
+					<th class="isaHeaderHex">Hexadecimal</th>
+					<th class="isaHeaderDesc">Description</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -260,6 +263,7 @@
 					<td>
 						<div class="isaInstructionName">Halt And Catch Fire</div>
 						Lights the CPU on fire, which terminates your program.
+						Due to technological restrictions, the CoolCPU simulator cannot accurately simulate this instruction, and will only halt the CPU.
 					</td>
 				</tr>
 			</tbody>
@@ -270,7 +274,7 @@
 <section>
 	<div class="container">
 		<h3>Sample program 1</h3>
-		<p>Let's say you want to print out "cool!". This means you'd have to write each character in that string to the <em>output register</em>, which we know from the Registers section is <code>0xF1</code>.</p>
+		<p>Let's say you want to print out "cool!". This means you'd have to write each character in that string to the <em>output register</em>, which we know from the "Description" section above is <code>0xF1</code>.</p>
 		<p>By looking up the characters in an <a href="https://www.asciitable.com/">ASCII table</a>, you can figure out what values to write. The instructions to do this might look something like:</p>
 		<pre>; print out c
 CON 0x63
@@ -354,7 +358,8 @@ loop:
 	HCF</pre>
 		<p>
 			The main thing to notice here is that we're using the A register to track how many iterations are left in the loop.
-			The first <code>CON 5</code> sets it to 5. Then, the <code>DEC</code> instruction subtracts 1, and the <code>JNZ</code> continues the loop, unless A is 0, in which case <code>HCF</code> is run.
+			At the beginning of the program, the <code>CON 5</code> sets it to 5.
+			Then, at the end of each loop iteration, the <code>DEC</code> instruction subtracts 1, and the <code>JNZ</code> continues the loop&mdash;unless A is 0, in which case <code>HCF</code> is run.
 		</p>
 		<p>
 			However, you might have noticed an issue with this: we're using the A register for both the loop count and the character values!

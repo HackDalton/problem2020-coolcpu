@@ -2,6 +2,10 @@ body {
 	font-family: "Open Sans", sans-serif;
 }
 
+textarea.form-control {
+	min-height: 150px;
+}
+
 section {
 	margin-bottom: 1rem;
 }
@@ -26,9 +30,17 @@ p {
 	border-bottom: solid 1px black;
 }
 
-.isa thead th {
+.isa thead tr th {
 	font-weight: normal;
 	font-style: italic;
+}
+
+.isa thead tr th.isaHeaderName {
+	min-width: 100px;
+}
+
+.isa thead tr th.isaHeaderHex {
+	min-width: 110px;
 }
 
 .isa tbody tr {
