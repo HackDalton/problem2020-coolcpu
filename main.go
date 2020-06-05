@@ -45,7 +45,7 @@ func routeRun(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	codeStr := strings.Replace(r.PostFormValue("code"), " ", "", -1)
+	codeStr := strings.ReplaceAll(strings.ReplaceAll(strings.ReplaceAll(r.PostFormValue("code"), " ", ""), "\n", ""), "\r", "")
 
 	code, err := hex.DecodeString(codeStr)
 	if err != nil {
