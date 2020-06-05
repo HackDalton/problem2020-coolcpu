@@ -237,6 +237,24 @@
 				</tr>
 
 				<tr>
+					<td>SWB</td>
+					<td>40</td>
+					<td>
+						<div class="isaInstructionName">Swap Register B</div>
+						Swaps the contents of registers A and B.
+					</td>
+				</tr>
+
+				<tr>
+					<td>SWC</td>
+					<td>41</td>
+					<td>
+						<div class="isaInstructionName">Swap Register C</div>
+						Swaps the contents of registers A and C.
+					</td>
+				</tr>
+
+				<tr>
 					<td>HCF</td>
 					<td>FF</td>
 					<td>
@@ -246,6 +264,128 @@
 				</tr>
 			</tbody>
 		</table>
+	</div>
+</section>
+
+<section>
+	<div class="container">
+		<h3>Sample program 1</h3>
+		<p>Let's say you want to print out "cool!". This means you'd have to write each character in that string to the <em>output register</em>, which we know from the Registers section is <code>0xF1</code>.</p>
+		<p>By looking up the characters in an <a href="https://www.asciitable.com/">ASCII table</a>, you can figure out what values to write. The instructions to do this might look something like:</p>
+		<pre>; print out c
+CON 0x63
+STA 0xF1
+
+; print out o
+CON 0x6F
+STA 0xF1
+
+; print out o
+CON 0x6F
+STA 0xF1
+
+; print out l
+CON 0x6C
+STA 0xF1
+
+; print out !
+CON 0x21
+STA 0xF1
+
+; stop CPU
+HCF</pre>
+		<p>
+			We use the <code>CON</code> instruction to load a value into register A, and then use the <code>STA</code> instruction to store that value into the output register.
+			Finally, we use <code>HCF</code> to set the CPU on fire, which ends the program.
+		</p>
+		<p>
+			Now, using the table above, we can determine the hexadecimal values that correspond to these instructions:
+		</p>
+		<pre>22 63
+11 F1
+22 6F
+11 F1
+22 6F
+11 F1
+22 6C
+11 F1
+22 21
+11 F1
+FF</pre>
+		<p>(they're spaced out on multiple lines for clarity&mdash;the spacing has no effect on their location)</p>
+		<p>And that's our program! You can try it in the simulator above.</p>
+	</div>
+</section>
+
+<section>
+	<div class="container">
+		<h3>Sample program 2</h3>
+		<p>Let's say you now want to repeat the earlier code five times. You could just write the whole thing out over and over; however, it's better to do this in a loop. That might look something like this:</p>
+		<pre>	CON 5
+loop:
+	SWB
+
+	; print out c
+	CON 0x63
+	STA 0xF1
+
+	; print out o
+	CON 0x6F
+	STA 0xF1
+
+	; print out o
+	CON 0x6F
+	STA 0xF1
+
+	; print out l
+	CON 0x6C
+	STA 0xF1
+
+	; print out !
+	CON 0x21
+	STA 0xF1
+
+	SWB
+
+	DEC
+	JNZ loop
+
+	; stop CPU
+	HCF</pre>
+		<p>
+			The main thing to notice here is that we're using the A register to track how many iterations are left in the loop.
+			The first <code>CON 5</code> sets it to 5. Then, the <code>DEC</code> instruction subtracts 1, and the <code>JNZ</code> continues the loop, unless A is 0, in which case <code>HCF</code> is run.
+		</p>
+		<p>
+			However, you might have noticed an issue with this: we're using the A register for both the loop count and the character values!
+			That's what the <code>SWB</code> instruction is for: it swaps registers A and B.
+			We swap at the start of the loop to save the loop count, and then do a swap at the end to restore the count so that we can check it.
+			Since most operations occur on register A, you'll find the swap instructions to be very helpful.
+		</p>
+		<p>
+			Like before, we can use the instruction table to find the hexadecimal representation of these instructions:
+		</p>
+		<pre>22 05
+40
+22 63
+11 F1
+22 6F
+11 F1
+22 6F
+11 F1
+22 6C
+11 F1
+22 21
+11 F1
+40
+21
+32 02
+FF</pre>
+		<p>
+			Notice how we had to calculate where the <code>loop</code> label is in the code.
+			Based on the size of the instruction before it, and knowing that the first byte is address <code>0x0</code>, we can determine that <code>loop</code> is <code>0x02</code>.
+			So, <code>JNZ loop</code> becomes <code>JNZ 0x02</code>, which becomes <code>32 02</code>.
+		</p>
 	</div>
 </section>
 
