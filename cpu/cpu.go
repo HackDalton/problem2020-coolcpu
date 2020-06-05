@@ -141,6 +141,11 @@ func (c *CPU) Step() {
 		// DEC
 		c.A -= 1
 
+	case 0x22:
+		// CON <data>
+		c.A = c.Read(c.PC + 1)
+		instructionSize = 2
+
 	case 0x30:
 		// JP <data>
 		destination := c.Read(c.PC + 1)
