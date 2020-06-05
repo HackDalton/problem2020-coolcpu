@@ -71,7 +71,7 @@ func routeRun(w http.ResponseWriter, r *http.Request) {
 		c.ROM[i] = code[i]
 	}
 
-	copy(c.RAM[0x93-cpu.DefaultBankSize:], []byte("super secret flag!\x00"))
+	copy(c.RAM[0x93-cpu.DefaultBankSize:], []byte("hackDalton{l00p_d3_l00p_syYBaqvCvi}\x00"))
 
 	err = c.Run(ctx)
 	if err != nil {
