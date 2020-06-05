@@ -8,16 +8,236 @@
 	</div>
 </section>
 
-<div class="container">
-	<h3>Try it now</h3>
-	<form action="/run" method="POST">
-		<div class="form-group">
-			<label for="code">Write your code here:</label>
-			<textarea name="code" class="form-control"></textarea>
-		</div>
+<section>
+	<div class="container">
+		<h3>Try it now</h3>
+		<form action="/run" method="POST">
+			<div class="form-group">
+				<label for="code">Write your code here:</label>
+				<textarea name="code" class="form-control"></textarea>
+			</div>
 
-		<button type="submit" class="btn btn-primary">Run</button>
-	</form>
-</div>
+			<button type="submit" class="btn btn-primary">Run</button>
+		</form>
+	</div>
+</section>
+
+<section>
+	<div class="container">
+		<h3>Description</h3>
+		<p>
+			The CoolCPU can access up to 256 bytes of external memory.
+			The first 128 bytes (<code>0x00</code> to <code>0x7F</code>) are <em>read-only memory</em>, or ROM, and it's what you set in the "Try it now" box above.
+			Then, the memory from <code>0x80</code> to <code>0xF0</code> is <em>random-access memory</em>, or RAM.
+			Your code can store and load values from RAM however it wants.
+		</p>
+		<p>
+			Finally, <code>0xF1</code> is the <em>output register</em>.
+			Anything you write to the output register will be printed to the screen.
+		</p>
+	</div>
+</section>
+
+<section>
+	<div class="container">
+		<h3>Registers</h3>
+		<p>
+			The CoolCPU has four main registers.
+			The first is the Program Counter, or <em>PC</em>, which keeps track of the next instruction to run.
+			The PC always starts at 0, and the CPU keeps track of it for you.
+		</p>
+		<p>
+			The remaining three are registers <em>A</em>, <em>B</em>, and <em>C</em>, which are general-purpose 8-bit registers.
+			You can use them any way you want; however, note that some instructions only work on register A.
+		</p>
+	</div>
+</section>
+
+<section>
+	<div class="container">
+		<h3>Instruction set</h3>
+		<table class="isa">
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th>Hexadecimal</th>
+					<th>Description</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>NOP</td>
+					<td>00</td>
+					<td>
+						<div class="isaInstructionName">No Operation</div>
+						Does nothing.
+					</td>
+				</tr>
+
+				<tr>
+					<td>LDA <em>nn</em></td>
+					<td>01 <em>nn</em></td>
+					<td>
+						<div class="isaInstructionName">Load Register A</div>
+						Reads the data at address <em>nn</em> and stores it in register A.
+					</td>
+				</tr>
+
+				<tr>
+					<td>LDB <em>nn</em></td>
+					<td>02 <em>nn</em></td>
+					<td>
+						<div class="isaInstructionName">Load Register B</div>
+						Reads the data at address <em>nn</em> and stores it in register B.
+					</td>
+				</tr>
+
+				<tr>
+					<td>LDC <em>nn</em></td>
+					<td>03 <em>nn</em></td>
+					<td>
+						<div class="isaInstructionName">Load Register C</div>
+						Reads the data at address <em>nn</em> and stores it in register C.
+					</td>
+				</tr>
+
+				<tr>
+					<td>LDA [A]</td>
+					<td>04</td>
+					<td>
+						<div class="isaInstructionName">Load Register A</div>
+						Reads the data located at the address in register A and stores it in register A.
+					</td>
+				</tr>
+
+				<tr>
+					<td>LDB [A]</td>
+					<td>05</td>
+					<td>
+						<div class="isaInstructionName">Load Register B</div>
+						Reads the data located at the address in register A and stores it in register B.
+					</td>
+				</tr>
+
+				<tr>
+					<td>LDC [A]</td>
+					<td>06</td>
+					<td>
+						<div class="isaInstructionName">Load Register C</div>
+						Reads the data located at the address in register A and stores it in register C.
+					</td>
+				</tr>
+
+				<tr>
+					<td>STA <em>nn</em></td>
+					<td>11 <em>nn</em></td>
+					<td>
+						<div class="isaInstructionName">Store Register A</div>
+						Stores the value of register A into address <em>nn</em>.
+					</td>
+				</tr>
+
+				<tr>
+					<td>STB <em>nn</em></td>
+					<td>12 <em>nn</em></td>
+					<td>
+						<div class="isaInstructionName">Store Register B</div>
+						Stores the value of register B into address <em>nn</em>.
+					</td>
+				</tr>
+
+				<tr>
+					<td>STC <em>nn</em></td>
+					<td>13 <em>nn</em></td>
+					<td>
+						<div class="isaInstructionName">Store Register C</div>
+						Stores the value of register C into address <em>nn</em>.
+					</td>
+				</tr>
+
+				<tr>
+					<td>STA [A]</td>
+					<td>14</td>
+					<td>
+						<div class="isaInstructionName">Store Register A</div>
+						Stores the value of register A into the memory address in register A.
+					</td>
+				</tr>
+
+				<tr>
+					<td>STB [A]</td>
+					<td>15</td>
+					<td>
+						<div class="isaInstructionName">Store Register B</div>
+						Stores the value of register B into the memory address in register A.
+					</td>
+				</tr>
+
+				<tr>
+					<td>STC [A]</td>
+					<td>16</td>
+					<td>
+						<div class="isaInstructionName">Store Register C</div>
+						Stores the value of register C into the memory address in register A.
+					</td>
+				</tr>
+
+				<tr>
+					<td>INC</td>
+					<td>20</td>
+					<td>
+						<div class="isaInstructionName">Increment</div>
+						Add 1 to register A.
+					</td>
+				</tr>
+
+				<tr>
+					<td>DEC</td>
+					<td>21</td>
+					<td>
+						<div class="isaInstructionName">Decrement</div>
+						Subtract 1 from register A.
+					</td>
+				</tr>
+
+				<tr>
+					<td>JP <em>nn</em></td>
+					<td>30 <em>nn</em></td>
+					<td>
+						<div class="isaInstructionName">Jump</div>
+						Moves the Program Counter to address <em>nn</em>.
+					</td>
+				</tr>
+
+				<tr>
+					<td>JZ <em>nn</em></td>
+					<td>31 <em>nn</em></td>
+					<td>
+						<div class="isaInstructionName">Jump If Zero</div>
+						If register A is 0, moves the Program Counter to address <em>nn</em>. Otherwise does nothing.
+					</td>
+				</tr>
+
+				<tr>
+					<td>JNZ <em>nn</em></td>
+					<td>32 <em>nn</em></td>
+					<td>
+						<div class="isaInstructionName">Jump If Not Zero</div>
+						If register A is not 0, moves the Program Counter to address <em>nn</em>. Otherwise does nothing.
+					</td>
+				</tr>
+
+				<tr>
+					<td>HCF</td>
+					<td>FF</td>
+					<td>
+						<div class="isaInstructionName">Halt And Catch Fire</div>
+						Lights the CPU on fire, which terminates your program.
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</section>
 
 {{template "footer" .}}

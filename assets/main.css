@@ -1,0 +1,43 @@
+body {
+	font-family: "Open Sans", sans-serif;
+}
+
+section {
+	margin-bottom: 1rem;
+}
+
+p {
+	margin-bottom: 0.75rem;
+}
+
+.isa {
+	width: 100%;
+}
+
+.isa thead {
+	border-bottom: solid 1px black;
+}
+
+.isa thead th {
+	font-weight: normal;
+	font-style: italic;
+}
+
+.isa tbody tr {
+	border-bottom: solid 1px #aaaaaa;
+}
+
+.isa tbody tr td:nth-child(1), .isa tbody tr td:nth-child(2) {
+	font-family: monospace;
+	font-size: 1rem;
+}
+
+.isa tbody tr td {
+	padding: 0.25rem 0;
+	font-size: 0.9rem;
+}
+
+.isa tbody tr .isaInstructionName {
+	font-weight: 600;
+	font-size: 1rem;
+}
