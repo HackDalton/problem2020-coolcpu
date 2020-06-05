@@ -10,6 +10,14 @@ p {
 	margin-bottom: 0.75rem;
 }
 
+.cpuState .cpuStateRegisters span {
+	margin-right: 1rem;
+}
+
+.cpuState .cpuStateRegisters {
+	margin-bottom: 0.5rem;
+}
+
 .isa {
 	width: 100%;
 }

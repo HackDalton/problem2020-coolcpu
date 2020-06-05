@@ -1,0 +1,18 @@
+{{template "header" .}}
+
+<div class="container">
+	<h3>Your code timed out!</h3>
+	<p>
+		Your code ran for too long and was stopped.
+		Make sure you included a <code>HCF</code> instruction!
+		Otherwise, we won't know when your program finished, and it will run forever.
+	</p>
+
+	<h4>Partial output</h4>
+	<pre>{{ or .Output "The CPU did not output anything before it timed out." }}</pre>
+
+	<h4>CPU state</h4>
+	{{template "cpustate" .}}
+</div>
+
+{{template "footer" .}}

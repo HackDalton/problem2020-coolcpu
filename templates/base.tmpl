@@ -28,6 +28,20 @@
 		</nav>
 {{end}}
 
+{{define "cpustate"}}
+<div class="cpuState">
+	<div class="cpuStateRegisters">
+		<span>PC: <code>0x{{ hex .CPU.PC }}</code></span>
+		<span>A: <code>0x{{ hex .CPU.A }}</code></span>
+		<span>B: <code>0x{{ hex .CPU.B }}</code></span>
+		<span>C: <code>0x{{ hex .CPU.C }}</code></span>
+	</div>
+
+	<h5>ROM</h5>
+	<pre>{{ hexdump .CPU.ROM }}</pre>
+</div>
+{{end}}
+
 {{define "footer"}}
 	</body>
 </html>

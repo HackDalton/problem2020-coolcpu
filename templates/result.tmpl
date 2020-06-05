@@ -1,8 +1,12 @@
 {{template "header" .}}
 
 <div class="container">
-	<h3>Result</h3>
-	<pre>{{ .Output }}</pre>
+	<h3>Your code completed.</h3>
+	<h4>Output</h4>
+	<pre>{{ or .Output "The CPU did not output anything." }}</pre>
+
+	<h4>CPU state</h4>
+	{{template "cpustate" .}}
 </div>
 
 {{template "footer" .}}

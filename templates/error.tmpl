@@ -1,10 +1,17 @@
 {{template "header" .}}
 
 <div class="container">
-	<h3>Error - {{ .Err.Error }}</h3>
+	<h3>The CoolCPU crashed!</h3>
+	<h3><code>{{ .Err.Error }}</code></h3>
+
+	<p>Since the CoolCPU, like all DynamicSystems&trade; products, is perfect, this indicates an issue with your code.</p>
+	<p>Information about the CPU at the moment it crashed is shown below.</p>
+
+	<h4>Partial output</h4>
+	<pre>{{ or .Output "The CPU did not output anything before it crashed." }}</pre>
 
 	<h4>CPU state</h4>
-	<p>PC: {{ .CPU.PC }}</p>
+	{{template "cpustate" .}}
 </div>
 
 {{template "footer" .}}

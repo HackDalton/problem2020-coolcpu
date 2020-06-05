@@ -53,7 +53,7 @@ func routeRun(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
 	defer cancel()
 
 	output := ""
@@ -75,9 +75,15 @@ func routeRun(w http.ResponseWriter, r *http.Request) {
 
 	err = c.Run(ctx)
 	if err != nil {
-		writeTemplate(w, "error", templateData{
-			CPU: c,
-			Err: err,
+		templateName := "error"
+		if err == context.DeadlineExceeded {
+			templateName = "timeout"
+		}
+
+		writeTemplate(w, templateName, templateData{
+			CPU:    c,
+			Err:    err,
+			Output: output,
 		})
 		return
 	}
@@ -103,10 +109,19 @@ func main() {
 		}
 
 		cleanName := strings.Replace(templateName.Name(), ".tmpl", "", -1)
-		templates[cleanName] = template.Must(template.ParseFiles(
-			filepath.Join("templates", "base.tmpl"),
-			filepath.Join("templates", templateName.Name()),
-		))
+		templates[cleanName] = template.Must(
+			template.New(templateName.Name()).Funcs(template.FuncMap{
+				"hex": func(i uint8) string {
+					return strconv.FormatInt(int64(i), 16)
+				},
+				"hexdump": func(data [cpu.DefaultBankSize]uint8) string {
+					return hex.Dump(data[:])
+				},
+			}).ParseFiles(
+				filepath.Join("templates", "base.tmpl"),
+				filepath.Join("templates", templateName.Name()),
+			),
+		)
 	}
 
 	http.Handle("/assets/", http.FileServer(http.Dir("./")))
