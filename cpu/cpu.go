@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"math/rand"
 )
 
 const DefaultBankSize = 0x80
@@ -26,10 +25,12 @@ type CPU struct {
 
 func NewCPU() *CPU {
 	c := &CPU{}
-	for i := 0; i < DefaultBankSize; i++ {
-		c.ROM[i] = uint8(rand.Int31n(256))
-		c.RAM[i] = uint8(rand.Int31n(256))
-	}
+	/*
+		for i := 0; i < DefaultBankSize; i++ {
+			c.ROM[i] = uint8(rand.Int31n(256))
+			c.RAM[i] = uint8(rand.Int31n(256))
+		}
+	*/
 	return c
 }
 
