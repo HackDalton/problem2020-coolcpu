@@ -1,4 +1,4 @@
-# HackDalton: CoolCPU
+# HackDalton: CoolCPU 1
 > Warning! There are spoilers ahead
 
 The two sample programs on the CoolCPU website help you understand the basics of how writing code works, so you should go through those two first.

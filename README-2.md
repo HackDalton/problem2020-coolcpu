@@ -1,4 +1,4 @@
-# HackDalton: CoolCPU v2
+# HackDalton: CoolCPU 2
 This problem was written by [Alex Studer](https://alex.studer.dev), a guest problem writer.
 
 ## Problem:
