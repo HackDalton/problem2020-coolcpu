@@ -44,9 +44,9 @@ Now we have to do the pokes.
 ```
 	CON 5 ; we'll now use register A to track the poke index
 poke_loop:
-	STA 0xF5		; 1 cycle
+	STA 0xF5			; 1 cycle
 	DEC				; 2 cycles
-	JNZ poke_loop	; 3 cycles
+	JNZ poke_loop			; 3 cycles
 ```
 
 But wait! The website told us that we need 36 cycles between the pokes (in this case, that's the `STA 0xF5` instruction). So, we need to add some code to slow down the CPU. Let's do that now:
@@ -67,10 +67,10 @@ delay_loop:
 	NOP				; 1 cycle
 
 	DEC				; 2 cycles
-	JNZ poke_loop	; 3 cycles
+	JNZ poke_loop			; 3 cycles
 ```
 
-That might be a little tricky to understand, but that new chunk of code will slow things down enough so that you get the right timing. (you're encouraged to think through it yourself)
+That might be a little tricky to understand, but that new chunk of code will slow things down enough so that you get the right timing. (you're encouraged to walk through the instructions yourself, counting the cycles as you go)
 
 > **Alternative**: If the whole delay_loop thing confuses you, keep in mind you really just need to slow down the program. Another valid way of doing this:
 > ```
@@ -164,20 +164,20 @@ start_copy_sector:
 
 	CON 5 ; we'll now use register A to track the poke index
 poke_loop:
-	STA 0xF5		; 1 cycle
+	STA 0xF5			; 1 cycle
 
 	; this part is just to delay things
 	SWC				; 1 cycle
-	CON 5			; 1 cycle
+	CON 5				; 1 cycle
 delay_loop:
 	DEC				; 2 cycles
-	JNZ	delay_loop	; 3 cycles
+	JNZ	delay_loop		; 3 cycles
 	SWC				; 1 cycle
 	NOP				; 1 cycle
 	NOP				; 1 cycle
 
 	DEC				; 2 cycles
-	JNZ poke_loop	; 3 cycles
+	JNZ poke_loop			; 3 cycles
 
 	LDA 0x90
 	JNZ print ; if it's not 0, print it out
