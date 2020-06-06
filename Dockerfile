@@ -12,4 +12,4 @@ COPY --from=build /go/bin/coolcpu ./
 COPY --from=build /go/src/github.com/HackDalton/coolcpu/templates templates/
 COPY --from=build /go/src/github.com/HackDalton/coolcpu/assets assets/
 
-CMD ["./coolcpu"]
+ENTRYPOINT ["./coolcpu"]
