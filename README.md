@@ -1,7 +1,10 @@
 # HackDalton: CoolCPU
-This problem was written by [Alex Studer](https://alex.studer.dev), a guest problem writer.
+This repository actually contains two challenges!
 
-## Problem:
-You've been hearing about the exciting new DynamicSystems&trade; CoolCPU, which they finally announced on their website: [problems.hackdalton.com:45414](http://problems.hackdalton.com:45414)
+## CoolCPU v1
+* [README](./README-1.md)
+* [WRITEUP](./WRITEUP-1.md)
 
-You've also heard from a friend that there's some...interesting data...on the online CoolCPU simulator. More specifically, a string of characters at memory address `0x93`, ending with a `0x00` character.
+## CoolCPU v2
+* [README](./README-2.md)
+* [WRITEUP](./WRITEUP-2.md)
