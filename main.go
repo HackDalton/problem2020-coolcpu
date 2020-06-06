@@ -6,8 +6,10 @@ import (
 	"html"
 	"html/template"
 	"io/ioutil"
+	"log"
 	"math/rand"
 	"net/http"
+	"os"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -19,10 +21,13 @@ import (
 // careful! can only do concurrent reads, not writes
 var templates map[string]*template.Template
 
+var version cpu.Version
+
 type templateData struct {
-	CPU    *cpu.CPU
-	Err    error
-	Output string
+	CPU     *cpu.CPU
+	Version cpu.Version
+	Err     error
+	Output  string
 }
 
 func writeTemplate(w http.ResponseWriter, template string, data templateData) {
@@ -34,7 +39,9 @@ func writeTemplate(w http.ResponseWriter, template string, data templateData) {
 }
 
 func routeIndex(w http.ResponseWriter, r *http.Request) {
-	writeTemplate(w, "index", templateData{})
+	writeTemplate(w, "index", templateData{
+		Version: version,
+	})
 }
 
 func routeRun(w http.ResponseWriter, r *http.Request) {
@@ -57,7 +64,7 @@ func routeRun(w http.ResponseWriter, r *http.Request) {
 	defer cancel()
 
 	output := ""
-	c := cpu.NewCPU()
+	c := cpu.NewCPU(version)
 	c.WriteCallback = func(c uint8) {
 		output += string(c)
 	}
@@ -71,7 +78,9 @@ func routeRun(w http.ResponseWriter, r *http.Request) {
 		c.ROM[i] = code[i]
 	}
 
-	copy(c.RAM[0x93-cpu.DefaultBankSize:], []byte("hackDalton{l00p_d3_l00p_syYBaqvCvi}\x00"))
+	if c.Version == cpu.Version1 {
+		copy(c.RAM[0x93-cpu.DefaultBankSize:], []byte("hackDalton{l00p_d3_l00p_syYBaqvCvi}\x00"))
+	}
 
 	err = c.Run(ctx)
 	if err != nil {
@@ -81,21 +90,37 @@ func routeRun(w http.ResponseWriter, r *http.Request) {
 		}
 
 		writeTemplate(w, templateName, templateData{
-			CPU:    c,
-			Err:    err,
-			Output: output,
+			CPU:     c,
+			Version: version,
+			Err:     err,
+			Output:  output,
 		})
 		return
 	}
 
 	writeTemplate(w, "result", templateData{
-		CPU:    c,
-		Output: output,
+		CPU:     c,
+		Version: version,
+		Output:  output,
 	})
 }
 
 func main() {
 	rand.Seed(time.Now().UnixNano())
+
+	if len(os.Args) != 2 {
+		log.Println("You must set the CPU version to use (either 1 or 2)!")
+		log.Fatalln("Usage: coolcpu [version]")
+	}
+
+	versionString := os.Args[1]
+	if versionString == "1" {
+		version = cpu.Version1
+	} else if versionString == "2" {
+		version = cpu.Version2
+	} else {
+		log.Fatalf("Invalid version '%s'.", versionString)
+	}
 
 	templates = map[string]*template.Template{}
 

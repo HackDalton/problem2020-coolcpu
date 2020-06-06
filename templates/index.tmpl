@@ -4,6 +4,15 @@
 	<div class="container">
 		<h1>The DynamicSystems&trade; CoolCPU is the future of computing.</h1>
 		<p class="lead">Advanced features like "addition" and "number comparisons" make anything else seem...<em>un</em>cool.</p>
+		{{ if eq .Version 2 }}
+		<div class="alert alert-warning" role="alert">
+			<h4 class="alert-heading">New in version 2</h4>
+			<ul>
+				<li>The Timing section has been added, describing how long each instruction takes to run.</li>
+				<li>The brand-new Dynamic<em>Blast!</em> Engine lets you quickly read data from an external hard drive.</li>
+			</ul>
+		</div>
+		{{ end }}
 		<img src="assets/cool.png" />
 	</div>
 </section>
@@ -37,6 +46,9 @@
 		<p>
 			Finally, <code>0xF1</code> is the <em>output register</em>.
 			Anything you write to the output register will be printed to the screen.
+			{{ if eq .Version 2 }}
+			In addition, consult the Dynamic<em>Blast!</em> Engine section to learn about the remaining registers.
+			{{ end }}
 		</p>
 	</div>
 </section>
@@ -56,6 +68,68 @@
 	</div>
 </section>
 
+{{ if eq .Version 2 }}
+<section>
+	<div class="container">
+		<h3>Timing</h3>
+		<p>
+			Different CoolCPU instructions take different amounts of time to run.
+			We measure each instruction in <em>clock cycles</em>.
+			The Instructions table below specifies the number of cycles each instruction requires.
+		</p>
+	</div>
+</section>
+{{ end }}
+
+{{ if eq .Version 2 }}
+<section>
+	<div class="container">
+		<h3>Dynamic<em>Blast!</em> Engine</h3>
+		<p>
+			The Dynamic<em>Blast!</em> Engine lets you read data from an external hard drive connected to the CoolCPU.
+			It works by copying data from the external hard drive to RAM.
+			You must set the parameters for the copy (for example, the source and destination) and then start the Dynamic<em>Blast!</em> Engine.
+		</p>
+		<p>
+			The hard drive is broken up into 256 different <em>sectors</em>, numbered from 0 to 255.
+			Each sector is 32 bytes long.
+			The Dynamic<em>Blast!</em> Engine works at a sector level.
+			It will always copy exactly one sector&mdash;no more and no less.
+		</p>
+		<p>
+			To perform a copy, do the following:
+			<ul>
+				<li>Set the <code>DBEDST</code> register (<code>0xF2</code>) to the <em>destination</em> address of your copy. This should be somewhere in RAM.</li>
+				<li>Set the <code>DBESRC</code> register (<code>0xF3</code>) to the <em>sector</em> you wish to copy from.</li>
+				<li>Set the <code>DBEGO</code> register (<code>0xF4</code>) to <code>0x01</code>. This starts the copy.</li>
+				<li>
+					Once the copy has started, you must periodically <em>poke</em> the Dynamic<em>Blast!</em> Engine.
+					Failure to properly poke the Dynamic<em>Blast!</em> Engine will destroy the hard drive.
+				</li>
+			</ul>
+		</p>
+
+		<h4>Poking the Dynamic<em>Blast!</em> Engine</h4>
+		<p>
+			As mentioned before, poking the Dynamic<em>Blast!</em> Engine is crucial.
+			To poke the Dynamic<em>Blast!</em> Engine, write the <em>poke index</em> to <code>DBEPKE</code> (<code>0xF5</code>).
+			The <em>poke index</em> starts at 5 and decreases by one for each poke.
+			So, for the first poke you would write a 5, then the next poke a 4, the next poke a 3, and so on.
+		</p>
+		<p>
+			The timing of the first poke does not matter.
+			However, for every poke after the first one, you must poke <em>precisely</em> 36 cycles after the previous poke&mdash;no more, no less.
+			To be even more precise: there should be exactly 36 cycles from right before the store instruction of the first poke up to right before the store instruction of the next poke.
+			Incorrect poke timing will destroy the attached hard drive.
+		</p>
+		<p>
+			You will need to poke the hard drive a total of 5 times. (so the last poke index you write to <code>DBEPKE</code> will be a 1)
+			After the fifth poke, the data will be available in memory, and the copy will be complete.
+		</p>
+	</div>
+</section>
+{{ end }}
+
 <section>
 	<div class="container">
 		<h3>Instruction set</h3>
@@ -64,6 +138,7 @@
 				<tr>
 					<th class="isaHeaderName">Name</th>
 					<th class="isaHeaderHex">Hexadecimal</th>
+					{{ if eq .Version 2 }}<th class="isaHeaderHex">Cycles</th>{{ end }}
 					<th class="isaHeaderDesc">Description</th>
 				</tr>
 			</thead>
@@ -71,6 +146,7 @@
 				<tr>
 					<td>NOP</td>
 					<td>00</td>
+					{{ if eq .Version 2 }}<td>1</td>{{ end }}
 					<td>
 						<div class="isaInstructionName">No Operation</div>
 						Does nothing.
@@ -80,6 +156,7 @@
 				<tr>
 					<td>LDA <em>nn</em></td>
 					<td>01 <em>nn</em></td>
+					{{ if eq .Version 2 }}<td>1</td>{{ end }}
 					<td>
 						<div class="isaInstructionName">Load Register A</div>
 						Reads the data at address <em>nn</em> and stores it in register A.
@@ -89,6 +166,7 @@
 				<tr>
 					<td>LDB <em>nn</em></td>
 					<td>02 <em>nn</em></td>
+					{{ if eq .Version 2 }}<td>1</td>{{ end }}
 					<td>
 						<div class="isaInstructionName">Load Register B</div>
 						Reads the data at address <em>nn</em> and stores it in register B.
@@ -98,6 +176,7 @@
 				<tr>
 					<td>LDC <em>nn</em></td>
 					<td>03 <em>nn</em></td>
+					{{ if eq .Version 2 }}<td>1</td>{{ end }}
 					<td>
 						<div class="isaInstructionName">Load Register C</div>
 						Reads the data at address <em>nn</em> and stores it in register C.
@@ -107,6 +186,7 @@
 				<tr>
 					<td>LDA [A]</td>
 					<td>04</td>
+					{{ if eq .Version 2 }}<td>2</td>{{ end }}
 					<td>
 						<div class="isaInstructionName">Load Register A</div>
 						Reads the data located at the address in register A and stores it in register A.
@@ -116,6 +196,7 @@
 				<tr>
 					<td>LDB [A]</td>
 					<td>05</td>
+					{{ if eq .Version 2 }}<td>2</td>{{ end }}
 					<td>
 						<div class="isaInstructionName">Load Register B</div>
 						Reads the data located at the address in register A and stores it in register B.
@@ -125,6 +206,7 @@
 				<tr>
 					<td>LDC [A]</td>
 					<td>06</td>
+					{{ if eq .Version 2 }}<td>2</td>{{ end }}
 					<td>
 						<div class="isaInstructionName">Load Register C</div>
 						Reads the data located at the address in register A and stores it in register C.
@@ -134,6 +216,7 @@
 				<tr>
 					<td>STA <em>nn</em></td>
 					<td>11 <em>nn</em></td>
+					{{ if eq .Version 2 }}<td>1</td>{{ end }}
 					<td>
 						<div class="isaInstructionName">Store Register A</div>
 						Stores the value of register A into address <em>nn</em>.
@@ -143,6 +226,7 @@
 				<tr>
 					<td>STB <em>nn</em></td>
 					<td>12 <em>nn</em></td>
+					{{ if eq .Version 2 }}<td>1</td>{{ end }}
 					<td>
 						<div class="isaInstructionName">Store Register B</div>
 						Stores the value of register B into address <em>nn</em>.
@@ -152,6 +236,7 @@
 				<tr>
 					<td>STC <em>nn</em></td>
 					<td>13 <em>nn</em></td>
+					{{ if eq .Version 2 }}<td>1</td>{{ end }}
 					<td>
 						<div class="isaInstructionName">Store Register C</div>
 						Stores the value of register C into address <em>nn</em>.
@@ -161,6 +246,7 @@
 				<tr>
 					<td>STA [A]</td>
 					<td>14</td>
+					{{ if eq .Version 2 }}<td>2</td>{{ end }}
 					<td>
 						<div class="isaInstructionName">Store Register A</div>
 						Stores the value of register A into the memory address in register A.
@@ -170,6 +256,7 @@
 				<tr>
 					<td>STB [A]</td>
 					<td>15</td>
+					{{ if eq .Version 2 }}<td>2</td>{{ end }}
 					<td>
 						<div class="isaInstructionName">Store Register B</div>
 						Stores the value of register B into the memory address in register A.
@@ -179,6 +266,7 @@
 				<tr>
 					<td>STC [A]</td>
 					<td>16</td>
+					{{ if eq .Version 2 }}<td>2</td>{{ end }}
 					<td>
 						<div class="isaInstructionName">Store Register C</div>
 						Stores the value of register C into the memory address in register A.
@@ -188,6 +276,7 @@
 				<tr>
 					<td>INC</td>
 					<td>20</td>
+					{{ if eq .Version 2 }}<td>2</td>{{ end }}
 					<td>
 						<div class="isaInstructionName">Increment</div>
 						Add 1 to register A.
@@ -197,6 +286,7 @@
 				<tr>
 					<td>DEC</td>
 					<td>21</td>
+					{{ if eq .Version 2 }}<td>2</td>{{ end }}
 					<td>
 						<div class="isaInstructionName">Decrement</div>
 						Subtract 1 from register A.
@@ -206,6 +296,7 @@
 				<tr>
 					<td>CON <em>nn</em></td>
 					<td>22 <em>nn</em></td>
+					{{ if eq .Version 2 }}<td>1</td>{{ end }}
 					<td>
 						<div class="isaInstructionName">Constant</div>
 						Sets register A to the literal value <em>nn</em>.
@@ -215,6 +306,7 @@
 				<tr>
 					<td>JP <em>nn</em></td>
 					<td>30 <em>nn</em></td>
+					{{ if eq .Version 2 }}<td>2</td>{{ end }}
 					<td>
 						<div class="isaInstructionName">Jump</div>
 						Moves the Program Counter to address <em>nn</em>.
@@ -224,6 +316,7 @@
 				<tr>
 					<td>JZ <em>nn</em></td>
 					<td>31 <em>nn</em></td>
+					{{ if eq .Version 2 }}<td>3</td>{{ end }}
 					<td>
 						<div class="isaInstructionName">Jump If Zero</div>
 						If register A is 0, moves the Program Counter to address <em>nn</em>. Otherwise does nothing.
@@ -233,6 +326,7 @@
 				<tr>
 					<td>JNZ <em>nn</em></td>
 					<td>32 <em>nn</em></td>
+					{{ if eq .Version 2 }}<td>3</td>{{ end }}
 					<td>
 						<div class="isaInstructionName">Jump If Not Zero</div>
 						If register A is not 0, moves the Program Counter to address <em>nn</em>. Otherwise does nothing.
@@ -242,6 +336,7 @@
 				<tr>
 					<td>SWB</td>
 					<td>40</td>
+					{{ if eq .Version 2 }}<td>1</td>{{ end }}
 					<td>
 						<div class="isaInstructionName">Swap Register B</div>
 						Swaps the contents of registers A and B.
@@ -251,6 +346,7 @@
 				<tr>
 					<td>SWC</td>
 					<td>41</td>
+					{{ if eq .Version 2 }}<td>1</td>{{ end }}
 					<td>
 						<div class="isaInstructionName">Swap Register C</div>
 						Swaps the contents of registers A and C.
@@ -260,6 +356,7 @@
 				<tr>
 					<td>HCF</td>
 					<td>FF</td>
+					{{ if eq .Version 2 }}<td>N/A</td>{{ end }}
 					<td>
 						<div class="isaInstructionName">Halt And Catch Fire</div>
 						Lights the CPU on fire, which terminates your program.
