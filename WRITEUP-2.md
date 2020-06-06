@@ -1,6 +1,8 @@
 # HackDalton: CoolCPU 2
 > Warning! There are spoilers ahead
 
+> You'll want to get through [the writeup of CoolCPU 1](./WRITEUP-1.md) first.
+
 The main new thing in part 2 is the addition of the external hard drive, or, as the website calls it, the DynamicBlast! Engine. We're told that one of the sectors has our flag, so we need to write some code that scans each sector for a flag.
 
 Also, as described on the website, the Engine has some strict timing requirements.
@@ -142,7 +144,8 @@ end:
 	HCF
 ```
 
-Finally, we can stitch all of that together:
+## Stitching it together
+Finally, we can put all the pieces together to get the result:
 ```
 	CON 0x90 ; we will copy to 0x90
 	STA 0xF2 ; write the destination address
