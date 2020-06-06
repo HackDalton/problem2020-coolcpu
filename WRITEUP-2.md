@@ -125,7 +125,7 @@ Ok, so now we have our pokes. Going back to the list of steps, we now need to ch
 	JP start_copy_sector
 ```
 
-For the `print` code, we can reuse what we did in [CoolCPU 1](./WRITEUP-1.md), as long as you remember to change the address we start the print from `0x93` to `0x90`:
+For the `print` code, we can reuse what we did in [CoolCPU 1](./WRITEUP-1.md), as long as you remember to change the start address of the print from `0x93` to `0x90`:
 
 ```
 print:
